@@ -86,11 +86,10 @@ public:
 
   ~NetworkIsolatorProcess() {}
 
-  process::Future<Option<mesos::slave::ContainerPrepareInfo>> prepare(
+  process::Future<Option<mesos::slave::ContainerLaunchInfo>> prepare(
       const ContainerID& containerId,
       const ExecutorInfo& executorInfo,
-      const std::string& directory,
-      const Option<std::string>& user);
+      const mesos::slave::ContainerConfig& containerConfig);
 
   process::Future<Nothing> isolate(
       const ContainerID& containerId,
@@ -141,18 +140,16 @@ public:
     return Nothing();
   }
 
-  virtual process::Future<Option<mesos::slave::ContainerPrepareInfo>> prepare(
+  virtual process::Future<Option<mesos::slave::ContainerLaunchInfo>> prepare(
       const ContainerID& containerId,
       const ExecutorInfo& executorInfo,
-      const std::string& directory,
-      const Option<std::string>& user)
+      const mesos::slave::ContainerConfig& containerConfig)
   {
     return dispatch(process.get(),
                     &NetworkIsolatorProcess::prepare,
                     containerId,
                     executorInfo,
-                    directory,
-                    user);
+                    containerConfig);
   }
 
   virtual process::Future<Nothing> isolate(
