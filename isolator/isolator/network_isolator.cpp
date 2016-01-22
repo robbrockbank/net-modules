@@ -101,9 +101,9 @@ static Try<OutProto> runCommand(const string& path, const InProto& command)
 
   string jsonCommand = stringify(JSON::protobuf(command));
 
-  # Send command and wait for the future to complete.
+  // Send command and wait for the future to complete.
   LOG(INFO) << "Sending command to " + path + ": " << jsonCommand;
-  process::io::write(child.get().in().get(), jsonCommand).wait();
+  process::io::write(child.get().in().get(), jsonCommand).get();
 
   {
     // Temporary hack until Subprocess supports closing stdin.
