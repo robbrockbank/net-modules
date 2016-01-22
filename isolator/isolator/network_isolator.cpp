@@ -104,6 +104,21 @@ static Try<OutProto> runCommand(const string& path, const InProto& command)
   LOG(INFO) << "Sending command to " + path + ": " << jsonCommand;
   process::io::write(child.get().in().get(), jsonCommand);
   process::io::write(child.get().in().get(), "\n");
+  process::io::write(child.get().in().get(), "\n");
+  process::io::write(child.get().in().get(), "\n");
+  process::io::write(child.get().in().get(), "\n");
+  process::io::write(child.get().in().get(), "\n");
+  process::io::write(child.get().in().get(), "\n");
+  process::io::write(child.get().in().get(), "\n");
+  process::io::write(child.get().in().get(), "\n");
+  process::io::write(child.get().in().get(), "\n");
+  process::io::write(child.get().in().get(), "\n");
+  process::io::write(child.get().in().get(), "\n");
+  process::io::write(child.get().in().get(), "\n");
+  process::io::write(child.get().in().get(), "\n");
+  process::io::write(child.get().in().get(), "\n");
+  process::io::write(child.get().in().get(), "\n");
+  process::io::write(child.get().in().get(), "\n");
 
   {
     // Temporary hack until Subprocess supports closing stdin.
