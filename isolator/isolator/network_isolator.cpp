@@ -103,7 +103,7 @@ static Try<OutProto> runCommand(const string& path, const InProto& command)
 
   LOG(INFO) << "Sending command to " + path + ": " << jsonCommand;
   process::io::write(child.get().in().get(), jsonCommand);
-  os::flush(child.get().in().get())
+  child.get().in() << std::flush
 
   {
     // Temporary hack until Subprocess supports closing stdin.
