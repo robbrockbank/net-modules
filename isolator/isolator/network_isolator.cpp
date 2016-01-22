@@ -121,11 +121,11 @@ static Try<OutProto> runCommand(const string& path, const InProto& command)
     os::close(fd.get());
   }
 
-  # Read stdout from the process
+  // Read stdout from the process
   string output = process::io::read(child.get().out().get()).get();
   LOG(INFO) << "Got response from " << path << ": " << output;
 
-  # And make sure we can see that the child process is dead.
+  // And make sure we can see that the child process is dead.
   waitpid(child.get().pid(), NULL, 0);
 
   Try<JSON::Object> jsonOutput_ = JSON::parse<JSON::Object>(output);
