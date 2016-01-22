@@ -101,8 +101,9 @@ static Try<OutProto> runCommand(const string& path, const InProto& command)
 
   string jsonCommand = stringify(JSON::protobuf(command));
 
+  # Send command and wait for the future to complete.
   LOG(INFO) << "Sending command to " + path + ": " << jsonCommand;
-  process::io::write(child.get().in().get(), jsonCommand);
+  process::io::write(child.get().in().get(), jsonCommand).wait();
 
   {
     // Temporary hack until Subprocess supports closing stdin.
@@ -120,9 +121,12 @@ static Try<OutProto> runCommand(const string& path, const InProto& command)
     os::close(fd.get());
   }
 
-  waitpid(child.get().pid(), NULL, 0);
+  # Read stdout from the process
   string output = process::io::read(child.get().out().get()).get();
   LOG(INFO) << "Got response from " << path << ": " << output;
+
+  # And make sure we can see that the child process is dead.
+  waitpid(child.get().pid(), NULL, 0);
 
   Try<JSON::Object> jsonOutput_ = JSON::parse<JSON::Object>(output);
   if (jsonOutput_.isError()) {
