@@ -102,7 +102,9 @@ static Try<OutProto> runCommand(const string& path, const InProto& command)
   string jsonCommand = stringify(JSON::protobuf(command));
 
   LOG(INFO) << "Sending command to " + path + ": " << jsonCommand;
-  process::io::write(child.get().in().get(), jsonCommand);
+  ::write(child.get().in().get(),
+          jsonCommand.c_str(),
+          jsonCommand.length() + 1);
 
   {
     // Temporary hack until Subprocess supports closing stdin.
@@ -120,9 +122,13 @@ static Try<OutProto> runCommand(const string& path, const InProto& command)
     os::close(fd.get());
   }
 
-  waitpid(child.get().pid(), NULL, 0);
-  string output = process::io::read(child.get().out().get()).get();
+  char buf[4096];
+  ssize_t ret = ::read(child.get().out().get(), buf, sizeof(buf));
+  assert (ret != -1);
+  string output = buf;
   LOG(INFO) << "Got response from " << path << ": " << output;
+
+  waitpid(child.get().pid(), NULL, 0);
 
   Try<JSON::Object> jsonOutput_ = JSON::parse<JSON::Object>(output);
   if (jsonOutput_.isError()) {
