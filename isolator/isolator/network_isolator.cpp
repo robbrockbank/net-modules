@@ -124,7 +124,7 @@ static Try<OutProto> runCommand(const string& path, const InProto& command)
   }
 
   char buf[4096];
-  ssize_t ret = ::read(child.get().out().get(), buf, sizeof(buf));
+  ret = ::read(child.get().out().get(), buf, sizeof(buf));
   assert (ret > 0);
   string output = buf;
   LOG(INFO) << "Got response from " << path << ": " << output;
