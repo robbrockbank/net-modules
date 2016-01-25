@@ -104,7 +104,7 @@ static Try<OutProto> runCommand(const string& path, const InProto& command)
   LOG(INFO) << "Sending command to " + path + ": " << jsonCommand;
   ssize_t ret = ::write(child.get().in().get(),
                         jsonCommand.c_str(),
-                        jsonCommand.length() + 1);
+                        jsonCommand.length());
   assert (ret > 0);
 
   {
