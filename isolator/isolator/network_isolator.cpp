@@ -102,9 +102,10 @@ static Try<OutProto> runCommand(const string& path, const InProto& command)
   string jsonCommand = stringify(JSON::protobuf(command));
 
   LOG(INFO) << "Sending command to " + path + ": " << jsonCommand;
-  ::write(child.get().in().get(),
-          jsonCommand.c_str(),
-          jsonCommand.length() + 1);
+  ssize_t ret = ::write(child.get().in().get(),
+                        jsonCommand.c_str(),
+                        jsonCommand.length() + 1);
+  assert (ret > 0);
 
   {
     // Temporary hack until Subprocess supports closing stdin.
@@ -124,7 +125,7 @@ static Try<OutProto> runCommand(const string& path, const InProto& command)
 
   char buf[4096];
   ssize_t ret = ::read(child.get().out().get(), buf, sizeof(buf));
-  assert (ret != -1);
+  assert (ret > 0);
   string output = buf;
   LOG(INFO) << "Got response from " << path << ": " << output;
 
