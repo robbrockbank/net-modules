@@ -126,7 +126,6 @@ static Try<OutProto> runCommand(const string& path, const InProto& command)
   char buf[4096];
   ret = ::read(child.get().out().get(), buf, sizeof(buf));
   assert (ret > 0);
-  LOG(INFO) << "Read " + ret + " bytes from stdout"
   string output = string(buf, ret);
   LOG(INFO) << "Got response from " << path << ": " << output;
 
