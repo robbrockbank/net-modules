@@ -106,7 +106,7 @@ static Try<OutProto> runCommand(const string& path, const InProto& command)
                         jsonCommand.c_str(),
                         jsonCommand.length());
   assert (ret > 0);
-  ssize_t ret = ::write(child.get().in().get(), "\n", 1);
+  ret = ::write(child.get().in().get(), "\n", 1);
   assert (ret > 0);
 
   char buf[4096];
