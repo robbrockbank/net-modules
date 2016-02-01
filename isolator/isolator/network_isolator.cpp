@@ -109,7 +109,7 @@ static Try<OutProto> runCommand(const string& path, const InProto& command)
                         jsonCommand.length());
   assert (ret > 0);
   LOG(INFO) << "Flushing buffer";
-  ::fflush(child.get().in().get());
+  ::fsync(child.get().in().get());
 
   LOG(INFO) << "Closing stdin";
   {
