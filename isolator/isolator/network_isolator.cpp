@@ -108,8 +108,10 @@ static Try<OutProto> runCommand(const string& path, const InProto& command)
                         jsonCommand.c_str(),
                         jsonCommand.length());
   assert (ret > 0);
+  LOG(INFO) << "Flushing buffer";
   ::flush(child.get().in().get());
 
+  LOG(INFO) << "Closing stdin";
   {
     // Temporary hack until Subprocess supports closing stdin.
     // We open /dev/null on fd and dup it over to child's stdin, effectively
@@ -126,6 +128,7 @@ static Try<OutProto> runCommand(const string& path, const InProto& command)
     os::close(fd.get());
   }
 
+  LOG(INFO) << "Reading stdout";
   char buf[4096];
   ret = ::read(child.get().out().get(), buf, sizeof(buf));
   assert (ret > 0);
