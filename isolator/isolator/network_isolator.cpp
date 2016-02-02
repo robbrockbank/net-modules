@@ -90,10 +90,12 @@ Try<Isolator*> networkIsolator = (Isolator*) NULL;
 template <typename InProto, typename OutProto>
 static Try<OutProto> runCommand(const string& path, const InProto& command)
 {
-  vector<string> argv(1);
-  argv[0] = path;
+  vector<string> argv(3);
+  argv[0] = "python";
+  argv[1] = "-u";
+  argv[2] = path;
   Try<process::Subprocess> child = process::subprocess(
-      argv[0],
+      pythonPath,
       argv,
       process::Subprocess::PIPE(),
       process::Subprocess::PIPE(),
